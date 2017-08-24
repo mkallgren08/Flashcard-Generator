@@ -6,7 +6,18 @@
   },
   {
     "type": "Basic Card",
-    "front": "Can I got to bed now? ",
-    "back": "Yes. Yes you can. It's been a long day."
+    "front": "Who played Star Lord in Guardians of the Galaxy?",
+    "back": "Chris Pratt"
+  },
+  {
+    "type": "Cloze Card",
+    "fullText": "Carbon 14 is the unstable isotope which allows carbon dating to be done",
+    "cloze": "Carbon 14",
+    "partial": ".... is the ununstable isotope which allows carbon dating to be done"
+  },
+  {
+    "type": "Cloze Card",
+    "fullText": "The 2017 recipient of the Nobel Prize for Literature was Bob Dylan",
+    "cloze": "Bob Dylan"
   }
 ]

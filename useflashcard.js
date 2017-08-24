@@ -4,6 +4,11 @@ var BasicCard = require("./basicflashcard.js");
 var ClozeCard = require("./clozecard.js");
 var fs = require("fs");
 
+var pulledCard;
+var indexArray = [];
+var alreadyPulledArray = [];
+var counter = 0;
+
 inquirer.prompt([
     {
         type: "list",
@@ -15,8 +20,9 @@ inquirer.prompt([
     if (answer.makeOrUse === "Make"){
         makeCard();
     } else {
-        //askQuestions();
-        return
+        indexArrayGenerator();
+        askQuestions();
+        //return
     }
 });
 
@@ -80,7 +86,7 @@ function makeCard(){
                 {
                     type: "input",
                     name: "fullText",
-                    message: "Fill out the full text of your card (the answer.",
+                    message: "Fill out the full text of your card (the answer).",
                      
                 },
                 {
@@ -96,9 +102,10 @@ function makeCard(){
                     type: "Cloze Card",
                     fullText: answer.fullText,
                     cloze: answer.cloze,
+                    partial: answer.partial
                 }
 
-                if (cardObj.fulltext.indexOf(cardObj.close) !== -1){ // checking to make sure the cloze statement
+                if (cardObj.fullText.indexOf(cardObj.cloze) !== -1){ // checking to make sure the cloze statement
                                                                      // is actually a part of the answer
 
                 library.push(cardObj); // pushes the new Card into the array of cards in our libary file
@@ -106,8 +113,8 @@ function makeCard(){
                                                                                     // as a "pretty" JSON object in the 
                                                                                     // library file
                 } else {
-                    console.log("I'm sorry, the cloze statement must match a portion of the phrase in the full text" + 
-                    "Please check your spelling and try again")
+                    console.log("I'm sorry, the cloze statement must match a portion of the phrase in the full text. " + 
+                    "Please check your spelling and try again.")
                     return;
                 }
 
@@ -134,4 +141,79 @@ function makeCard(){
 
 
     })
+}
+
+var indexCounter = 0
+
+function indexArrayGenerator(){ // This function generates a random array of indeces to cycle through. The 
+                                // length of the array should be the same as the length of the cardlibary JSON
+    if (indexCounter < library.length){
+        var indexGen = Math.floor(Math.random()*library.length)
+        console.log(indexGen)
+        if (indexArray.indexOf(indexGen) === -1){
+            indexArray.push(indexArray)
+            console.log(indexArray);
+            indexCounter++; 
+            indexArrayGenerator();
+        } else{
+            indexArrayGenerator();
+        }
+
+    }
+}
+
+function pullCard(card){
+    if (card.type === "Basic Card"){
+        pulledCard = new BasicCard(card.front, card.back)
+        return pulledCard.front;
+    } else {
+        pulledCard = new ClozeCard(card.fullText, card.cloze)
+        return pulledCard.clozeRemoved();
+    }
+
+}
+
+var indexArrayCounter = 0;
+
+function askQuestions(){
+    // This is just a quick check to make sure the index array has been made
+    //console.log(indexArray) ; 
+    if (counter < library.length){
+        // This function returns a card from the cardlibrary JSON.
+        // It uses the randomly generated indexArray to simulate a card-shuffle
+        // It uses the indexArrayCounter to keep track of which index on the indexArray 
+        // we are currently *on*
+        //let cardPath = library[indexArray[indexArrayCounter]];
+        let cardPath = library[indexArrayCounter];
+        pulledCard = pullCard(cardPath)
+        //console.log(pulledCard);
+        inquirer.prompt([
+            {
+                type: "input",
+                message: pulledCard, // Remember, pulledCard shows either the front of the basic card 
+                                     // or the partial text of a cloze card
+                name: "userAnswer"
+            }
+        ]).then(function(answer){
+            // Check if the user's answer matches the back of a basic card or the cloze statement.
+            // console.log("Back of card (basic): " + cardPath.back);
+            // console.log("Back of card (cloze): " + cardPath.cloze);
+            // console.log ("user answer: " + answer.userAnswer);
+            if (answer.userAnswer === cardPath.back || answer.userAnswer === cardPath.cloze){
+                    console.log("Huzzah! You are correct.\n")
+                } 
+                // If the user was incorrect, show the correct answer
+                else {
+                    if (cardPath.back !== undefined){ //If the card HAS a .front property, then it's a Basic card
+                                                         // If it doesn't, that means it's a Cloze card.
+                        console.log("I'm sorry, the correct answer is: " + cardPath.back + ".\n")
+                    } else {
+                        console.log( "I'm sorry, the correct answer is: " + cardPath.cloze + ".\n")
+                    }
+                };
+                indexArrayCounter++; // increases the counter for the next run-through!
+                counter++;
+                askQuestions(); //start the fun all over again!
+        })
+    }
 }
