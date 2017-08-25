@@ -2,22 +2,42 @@
   {
     "type": "Basic Card",
     "front": "What naturally occuring element has the highest melting point?",
-    "back": "Tungsten"
+    "back": "tungsten"
   },
   {
     "type": "Basic Card",
     "front": "Who played Star Lord in Guardians of the Galaxy?",
-    "back": "Chris Pratt"
+    "back": "chris pratt"
   },
   {
     "type": "Cloze Card",
     "fullText": "Carbon 14 is the unstable isotope which allows carbon dating to be done",
-    "cloze": "Carbon 14",
+    "cloze": "carbon 14",
     "partial": ".... is the ununstable isotope which allows carbon dating to be done"
   },
   {
     "type": "Cloze Card",
     "fullText": "The 2017 recipient of the Nobel Prize for Literature was Bob Dylan",
     "cloze": "Bob Dylan"
+  },
+  {
+    "type": "Cloze Card",
+    "fullText": "This is annoying",
+    "cloze": "annoying"
+  },
+  {
+    "type": "Basic Card",
+    "front": "What year did Family Guy premiere? ",
+    "back": "1999"
+  },
+  {
+    "type": "Basic Card",
+    "front": "Who was the second President of the United States?",
+    "back": "thomas jefferson"
+  },
+  {
+    "type": "Basic Card",
+    "front": "Who was the first King of The Netherlands?",
+    "back": "willem van oranje"
   }
 ]

@@ -12,11 +12,11 @@ function ClozeCard(fullText, cloze){
 
 }
 
-var test = new ClozeCard("Let us do a quick test", "test");
-console.log(test.partial);
-console.log(test.clozeRemoved());
-console.log(test.cloze);
-console.log(test.fullText);
+// var test = new ClozeCard("Let us do a quick test", "test");
+// console.log(test.partial);
+// console.log(test.clozeRemoved());
+// console.log(test.cloze);
+// console.log(test.fullText);
 
 // Constructor that creates a prototype of ClozeCard to return the close-formatted question
 // function ClozeCardPrototype() {

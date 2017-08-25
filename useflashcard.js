@@ -5,9 +5,9 @@ var ClozeCard = require("./clozecard.js");
 var fs = require("fs");
 
 var pulledCard;
-var indexArray = [];
 var alreadyPulledArray = [];
 var counter = 0;
+var indexArray = [];
 
 inquirer.prompt([
     {
@@ -20,7 +20,7 @@ inquirer.prompt([
     if (answer.makeOrUse === "Make"){
         makeCard();
     } else {
-        indexArrayGenerator();
+        //indexArrayGenerator(library);
         askQuestions();
         //return
     }
@@ -58,7 +58,7 @@ function makeCard(){
                 let cardObj = {
                     type: "Basic Card",
                     front: answer.cardFront,
-                    back: answer.cardBack,
+                    back: answer.cardBack.toLowerCase(),
                 }
 
                 library.push(cardObj); // pushes the new Card into the array of cards in our libary file
@@ -101,7 +101,7 @@ function makeCard(){
                 let cardObj = {
                     type: "Cloze Card",
                     fullText: answer.fullText,
-                    cloze: answer.cloze,
+                    cloze: answer.cloze.toLowerCase(),
                     partial: answer.partial
                 }
 
@@ -143,23 +143,47 @@ function makeCard(){
     })
 }
 
-var indexCounter = 0
 
-function indexArrayGenerator(){ // This function generates a random array of indeces to cycle through. The 
+
+function indexArrayGenerator(array){ // This function generates a random array of indeces to cycle through. The 
                                 // length of the array should be the same as the length of the cardlibary JSON
-    if (indexCounter < library.length){
-        var indexGen = Math.floor(Math.random()*library.length)
-        console.log(indexGen)
-        if (indexArray.indexOf(indexGen) === -1){
-            indexArray.push(indexArray)
-            console.log(indexArray);
-            indexCounter++; 
-            indexArrayGenerator();
-        } else{
-            indexArrayGenerator();
+    var indexCounter = array.length;
+    function internalGenerator(array){
+        while (0 !== indexCounter){
+            var indexGen = Math.floor(Math.random()*indexCounter)
+            console.log(indexGen)
+                if (indexArray.indexOf(indexGen) === -1){
+                    indexArray.push(indexArray)
+                    console.log(indexArray);
+                    indexCounter--; 
+                    if (indexArray.length === array.length){
+                        return indexArray;
+                        console.log('Index array  = ' + indexArray)
+                    }
+                } else{
+                    internalGenerator(array);
+            }
         }
-
     }
+
+internalGenerator(array)
+}
+
+
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
 }
 
 function pullCard(card){
@@ -184,7 +208,10 @@ function askQuestions(){
         // It uses the indexArrayCounter to keep track of which index on the indexArray 
         // we are currently *on*
         //let cardPath = library[indexArray[indexArrayCounter]];
-        let cardPath = library[indexArrayCounter];
+        //indexArrayGenerator(library)
+        shuffle(library)
+        //let cardPath = library[indexArray[indexArrayCounter]];
+        let cardPath = library[indexArrayCounter]
         pulledCard = pullCard(cardPath)
         //console.log(pulledCard);
         inquirer.prompt([
@@ -199,7 +226,7 @@ function askQuestions(){
             // console.log("Back of card (basic): " + cardPath.back);
             // console.log("Back of card (cloze): " + cardPath.cloze);
             // console.log ("user answer: " + answer.userAnswer);
-            if (answer.userAnswer === cardPath.back || answer.userAnswer === cardPath.cloze){
+            if (answer.userAnswer.toLowerCase() === cardPath.back || answer.userAnswer.toLowerCase() === cardPath.cloze){
                     console.log("Huzzah! You are correct.\n")
                 } 
                 // If the user was incorrect, show the correct answer

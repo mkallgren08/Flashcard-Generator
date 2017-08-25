@@ -1,0 +1,8 @@
+Things I want to improve:
+
+1) Cleaning up extraneous comments and test-lines
+2) Getting the shuffle function to not repeat entries... I've gotten close, but 
+   run into problems of circulity (i.e. a recursive function pinging so many times
+   that I exceed my ping limit with only 4 cards in the library...)
+3) Setting a collection of different "decks" to pull from, based on topic (i.e. 
+   'History", "Cinema/TV Facts", "Scientific Facts," etc)
